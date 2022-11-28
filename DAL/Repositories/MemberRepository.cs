@@ -155,7 +155,22 @@ namespace DAL.Repositories
 
         public override bool Update(Member entity)
         {
-            throw new NotImplementedException();
+            IDbCommand cmd = _connection.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "UPDATE Member SET Email=@Email, Pseudo = @Pseudo, FirstName = @FirstName, LastName = @LastName , BirthDate=@BirthDate WHERE Member_Id= @id";
+
+
+            NewMethod(entity.Email, "@Email", cmd);
+            NewMethod(entity.Pseudo, "@Pseudo", cmd);
+            NewMethod(entity.FirstName, "@FirstName", cmd);
+            NewMethod(entity.LastName, "@LastName", cmd);
+            NewMethod(entity.BirthDate, "@BirthDate", cmd);
+            NewMethod(entity.MemberId, "@id", cmd);
+            _connection.Open();
+            int result =cmd.ExecuteNonQuery();
+            _connection.Close();
+
+            return result==1;
         }
 
         protected override Member Mapper(IDataRecord record)
@@ -164,7 +179,10 @@ namespace DAL.Repositories
             {
                 MemberId = (int)record["Member_ID"],
                 Pseudo = (string)record["Pseudo"],
-                Email = (string)record["Email"]
+                Email = (string)record["Email"],
+                FirstName= (string)record["FirstName"],
+                LastName= (string)record["LastName"],
+                BirthDate= (DateTime)record["BirthDate"]
             };
         }
 

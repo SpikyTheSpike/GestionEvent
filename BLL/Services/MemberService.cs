@@ -57,6 +57,7 @@ namespace BLL.Services
            
             memberData.hashPsw = Argon2.Hash(memberData.Psw);
             memberData.Psw = null;
+           
 
             int id = _memberRepository.Add(memberData);
             return _memberRepository.GetById(id);

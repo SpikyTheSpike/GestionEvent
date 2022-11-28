@@ -5,6 +5,9 @@ using DAL.Repositories;
 using GestionEvent.Tools;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +24,26 @@ builder.Services.AddScoped<IDbConnection>(sp =>
 {
     return new SqlConnection(builder.Configuration.GetConnectionString("default"));
 });
+
+builder.Services.AddScoped<IEvenet, EvenetRepository>();
 builder.Services.AddScoped<IMember, MemberRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IEvenetService, EvenetService>();
 builder.Services.AddScoped<TokenManager>();
 
+
+//impossible d'ajouter le nuggets package Jwt
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JwtInfo").GetSection("secret").Value)),
+
+        ValidateIssuer = false,
+        ValidateAudience = false,
+    };
+});
 
 builder.Services.AddAuthorization(options =>
 {

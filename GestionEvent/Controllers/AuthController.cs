@@ -61,7 +61,11 @@ namespace GestionEvent.Controllers
 
         }
 
-
+       
+        //public IActionResult Update()
+        //{
+        //    return Ok();
+        //}
        
 
     }

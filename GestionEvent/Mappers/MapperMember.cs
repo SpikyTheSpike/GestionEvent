@@ -11,7 +11,10 @@ namespace GestionEvent.Mappers
             {
                 Email = f.Email,
                 Psw = f.Password,
-                Pseudo = f.Pseudo
+                Pseudo = f.Pseudo,
+                FirstName = f.FirstName,
+                LastName = f.LastName,
+                BirthDate = f.Birthdate
             };
         }
 
@@ -21,7 +24,10 @@ namespace GestionEvent.Mappers
             {
                 Email = member.Email,
                 Pseudo = member.Pseudo,
-                MemberId = member.MemberId
+                MemberId = member.MemberId,
+                FirstName = member.FirstName,
+                LastName = member.LastName,
+                BirthDate = member.BirthDate
             };
         }
     }
