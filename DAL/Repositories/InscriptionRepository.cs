@@ -17,18 +17,44 @@ namespace DAL.Repositories
 
         public override int Add(Inscription entity)
         {
-            IDbCommand cmd = _connection.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "INSERT INTO InscriptionEvent ( NombreParticipant , Member_Id, Event_Id, Remarque) OUTPUT [inserted].[Inscription_Id] VALUES (@NombreParticipant, @Member_Id, @Event_Id, @Remarque)";
-            NewMethod(entity.NombrePlace, "@NombreParticipant", cmd);
-            NewMethod(entity.Member_Id, "@Member_Id", cmd);
-            NewMethod(entity.Event_Id, "@Event_Id", cmd);
-            NewMethod(entity.Remarque, "@Remarque", cmd);
-
+            IDbCommand selec = _connection.CreateCommand();
+            selec.CommandType = CommandType.Text;
+            selec.CommandText = "SELECT SUM(NombreParticipant) FROM InscriptionEvent WHERE Event_Id=@Id GROUP BY EVENT_ID ";
+            NewMethod(entity.Event_Id, "@Id", selec);
             _connection.Open();
-            int id = (int)cmd.ExecuteScalar();
+            int? nombrePlacePrie = (int?)selec.ExecuteScalar();
             _connection.Close();
-            return id;
+
+            if (nombrePlacePrie is null)
+                nombrePlacePrie = 0;
+
+            IDbCommand selec1 = _connection.CreateCommand();
+            selec1.CommandType = CommandType.Text;
+            selec1.CommandText = "SELECT LimitePersonne FROM Event WHERE Event_Id=@Event_Id";
+            NewMethod(entity.Event_Id, "@Event_Id", selec1);
+            _connection.Open();
+            int maxPlace = (int)selec1.ExecuteScalar();
+            _connection.Close();
+
+            if (nombrePlacePrie + entity.NombrePlace <= maxPlace)
+            {
+                IDbCommand cmd = _connection.CreateCommand();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "INSERT INTO InscriptionEvent ( NombreParticipant , Member_Id, Event_Id, Remarque) OUTPUT [inserted].[Inscription_Id] VALUES (@NombreParticipant, @Member_Id, @Event_Id, @Remarque)";
+                NewMethod(entity.NombrePlace, "@NombreParticipant", cmd);
+                NewMethod(entity.Member_Id, "@Member_Id", cmd);
+                NewMethod(entity.Event_Id, "@Event_Id", cmd);
+                NewMethod(entity.Remarque, "@Remarque", cmd);
+
+                _connection.Open();
+                int id = (int)cmd.ExecuteScalar();
+                _connection.Close();
+                return id;
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
         private static void NewMethod(object? value, string name, IDbCommand cmd)
         {

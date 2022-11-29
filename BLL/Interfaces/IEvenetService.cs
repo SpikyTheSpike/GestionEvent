@@ -17,6 +17,6 @@ namespace BLL.Interfaces
         public bool DeleteOneOfMyEvent(int eventId, int memberId);
         public int CancelOneOfMyEvent(int eventId, int memberId);
         public int UnCancelOneOfMyEvent(int eventId, int memberId);
-
+        void UpdateEvent(Evenement data, int id);
     }
 }

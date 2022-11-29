@@ -16,5 +16,6 @@ namespace DAL.Interfaces
         bool Delete(int id, int otherId);
         int Cancel(int eventId, int memberId);
         int UnCancel(int eventId, int memberId);
+        void UpdateEvent(Evenement data, int id);
     }
 }

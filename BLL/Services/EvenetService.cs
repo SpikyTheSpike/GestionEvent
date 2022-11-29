@@ -56,5 +56,10 @@ namespace BLL.Services
         {
             return _eventRepository.UnCancel(eventId, memberId);
         }
+
+        public void UpdateEvent(Evenement data, int id)
+        {
+             _eventRepository.UpdateEvent(data, id);
+        }
     }
 }

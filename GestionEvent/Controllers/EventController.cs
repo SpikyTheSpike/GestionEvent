@@ -114,5 +114,27 @@ namespace GestionEvent.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPatch("update")]
+        [Authorize("connected")]
+        public IActionResult UpdateProfile(EventUpdateViewModel form)
+        {
+            {
+                if (!ModelState.IsValid) return BadRequest();
+                try
+                {
+                    ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+                    int id = int.Parse(identity.Claims.First(x => x.Type == "MemberId").Value);
+
+                    _eventService.UpdateEvent(form.ToBLL(), id);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+
+        }
     }
 }

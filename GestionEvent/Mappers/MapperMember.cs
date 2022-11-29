@@ -18,6 +18,7 @@ namespace GestionEvent.Mappers
             };
         }
 
+
         public static ConnectedUserDTO ToDTO(this Member member)
         {
             return new ConnectedUserDTO

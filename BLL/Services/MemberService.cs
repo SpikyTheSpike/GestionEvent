@@ -62,5 +62,12 @@ namespace BLL.Services
             int id = _memberRepository.Add(memberData);
             return _memberRepository.GetById(id);
         }
+
+        public void UpdateProfile(Member data, int id)
+        {
+            data.hashPsw = Argon2.Hash(data.Psw);
+            data.Psw = null;
+            _memberRepository.UpdateProfile(data,id);
+        }
     }
 }

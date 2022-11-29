@@ -42,7 +42,32 @@ namespace GestionEvent.Models
             public string ConfirmPassword { get; set; }
         }
 
-        public class AuthLoginViewModel
+        public class UpdateRegisterViewModel
+        {
+            [Required(ErrorMessage = "L'e-mail est requis !")]
+            [DisplayName("E-mail")]
+            [DataType(DataType.EmailAddress)]
+            public string Email { get; set; }
+
+            [Required(ErrorMessage = "Le pseudo est requis !")]
+            [DisplayName("Pseudo")]
+            [MinLength(2, ErrorMessage = "le pseudo doit contenir minimum 2 caractères")]
+            [MaxLength(50, ErrorMessage = "Le pseudo doit contenir maximum 50 caractères")]
+            [RegularExpression("^[A-Za-z][A-Za-z0-9]*$", ErrorMessage = "Pas de symnbole :o")]
+            public string Pseudo { get; set; }
+
+
+            [DisplayName("Prénom")]
+            public string FirstName { get; set; }
+
+            [DisplayName("Nom")]
+            public string LastName { get; set; }
+
+            [DisplayName("Date de naissance")]
+            public DateTime Birthdate { get; set; }
+
+        }
+    public class AuthLoginViewModel
         {
             [DisplayName("Pseudo / E-mail")]
             public string Identifiant { get; set; }

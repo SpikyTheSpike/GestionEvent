@@ -17,6 +17,8 @@ namespace DAL.Repositories
 
         public override int Add(Evenement entity)
         {
+          
+
             IDbCommand cmd = _connection.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText =
@@ -40,6 +42,27 @@ namespace DAL.Repositories
 
         public  bool Delete(int id,int member_id)
         {
+
+            IDbCommand selec = _connection.CreateCommand();
+            selec.CommandType = CommandType.Text;
+            selec.CommandText = "SELECT COUNT(*) FROM Event WHERE Event_Id=@Id AND Member_Id=@MId";
+             NewMethod(id, "@Id", selec);
+            NewMethod(member_id, "@MId", selec);
+            _connection.Open();
+            int binks = (int)selec.ExecuteScalar();
+            _connection.Close();
+
+            if (binks > 0)
+            {
+                IDbCommand command = _connection.CreateCommand();
+                command.CommandType = CommandType.Text;
+                command.CommandText = "DELETE  FROM InscriptionEvent WHERE Event_Id=@lId";
+                NewMethod(id, "@lId", command);
+                _connection.Open();
+                int result1 = command.ExecuteNonQuery();
+                _connection.Close();
+            }
+
             IDbCommand cmd = _connection.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "DELETE FROM Event WHERE Event_Id=@Id AND Member_Id=@MId";
@@ -183,6 +206,26 @@ namespace DAL.Repositories
             _connection.Close();
 
             return result;
+        }
+
+        public void UpdateEvent(Evenement data, int id)
+        {
+            IDbCommand cmd = _connection.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "UPDATE Event SET Nom=@Nom, Description = @Description, DateDebut = @DateDebut, DateFin = @DateFin , Photo=@Photo ,LimitePersonne=@LimitPlace, ModifiedAt= GETDATE() WHERE Event_Id= @EventId AND Member_Id= @id";
+
+
+            NewMethod(data.Nom, "@Nom", cmd);
+            NewMethod(data.Description, "@Description", cmd);
+            NewMethod(data.DateDebut, "@DateDebut", cmd);
+            NewMethod(data.DateFin, "@DateFin", cmd);
+            NewMethod(data.Photo, "@Photo", cmd);
+            NewMethod(data.LimitPlace, "@LimitPlace", cmd);
+            NewMethod(id, "@id", cmd);
+            NewMethod(data.Event_Id, "@EventId", cmd);
+            _connection.Open();
+            int result = cmd.ExecuteNonQuery();
+            _connection.Close();
         }
     }
 }

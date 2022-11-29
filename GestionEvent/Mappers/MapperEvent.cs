@@ -18,5 +18,19 @@ namespace GestionEvent.Mappers
                 LimitPlace = f.LimitPlace
             };
         }
+
+        public static Evenement ToBLL(this EventUpdateViewModel f)
+        {
+            return new Evenement
+            {
+                Event_Id=f.EventId,
+                Nom = f.Nom,
+                Description = f.Description,
+                DateDebut = f.DateDebut,
+                DateFin = f.DateFin,
+                Photo = f.Photo,
+                LimitPlace = f.LimitPlace
+            };
+        }
     }
 }

@@ -204,5 +204,24 @@ namespace DAL.Repositories
             _connection.Close();
             return hashPaw;
         }
+
+        public void UpdateProfile(Member data, int id)
+        {
+            IDbCommand cmd = _connection.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "UPDATE Member SET Email=@Email, Pseudo = @Pseudo, FirstName = @FirstName, LastName = @LastName , BirthDate=@BirthDate ,Pwd_Hash=@Psw  WHERE Member_Id= @id";
+
+
+            NewMethod(data.Email, "@Email", cmd);
+            NewMethod(data.Pseudo, "@Pseudo", cmd);
+            NewMethod(data.FirstName, "@FirstName", cmd);
+            NewMethod(data.LastName, "@LastName", cmd);
+            NewMethod(data.BirthDate, "@BirthDate", cmd);
+            NewMethod(data.hashPsw, "@Psw", cmd);
+            NewMethod(id, "@id", cmd);
+            _connection.Open();
+            int result = cmd.ExecuteNonQuery();
+            _connection.Close();
+        }
     }
 }

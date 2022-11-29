@@ -14,5 +14,6 @@ namespace DAL.Interfaces
         Member? GetByEmail(string Email);
 
         string? GetHashPwd(string identifiant);
+        void UpdateProfile(Member data, int id);
     }
 }
