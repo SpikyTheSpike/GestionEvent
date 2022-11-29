@@ -19,6 +19,11 @@ namespace BLL.Services
             _eventRepository = eventRepository;
         }
 
+        public int CancelOneOfMyEvent(int eventId, int memberId)
+        {
+            return _eventRepository.Cancel(eventId, memberId);
+        }
+
         public Evenement? CreateNewEvent(Evenement data, int MemberId)
         {
             if (string.IsNullOrWhiteSpace(data.Nom))
@@ -32,9 +37,24 @@ namespace BLL.Services
             return _eventRepository.GetById(id);
         }
 
+        public bool DeleteOneOfMyEvent(int eventId, int memberId)
+        {
+            return _eventRepository.Delete(eventId,memberId);
+        }
+
         public IEnumerable<Evenement> SeeEveryEvent()
         {
             return _eventRepository.GetAll();
+        }
+
+        public IEnumerable<Evenement> SeeFuturEvent()
+        {
+            return _eventRepository.GetFutur();
+        }
+
+        public int UnCancelOneOfMyEvent(int eventId, int memberId)
+        {
+            return _eventRepository.UnCancel(eventId, memberId);
         }
     }
 }

@@ -5,8 +5,6 @@ namespace GestionEvent.Models
 {
     public class EventViewModel
     {
-     
-
 
         [Required(ErrorMessage = "Le nom est requis !")]
         [DisplayName("Nom")]
@@ -30,5 +28,12 @@ namespace GestionEvent.Models
 
         [DisplayName("Limite de place")]
         public int LimitPlace { get; set; }
+    }
+    public class EventDeleteOrCancelViewModel
+    {
+        [Required(ErrorMessage = "L'event id est requis !")]
+        [DisplayName("EventId")]
+        public int EventId { get; set; }
+
     }
 }

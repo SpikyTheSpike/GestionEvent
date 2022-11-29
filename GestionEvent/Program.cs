@@ -27,12 +27,13 @@ builder.Services.AddScoped<IDbConnection>(sp =>
 
 builder.Services.AddScoped<IEvenet, EvenetRepository>();
 builder.Services.AddScoped<IMember, MemberRepository>();
+builder.Services.AddScoped<IInscription, InscriptionRepository>();
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IEvenetService, EvenetService>();
+builder.Services.AddScoped<IInscriptionService, InscriptionService>();
 builder.Services.AddScoped<TokenManager>();
 
 
-//impossible d'ajouter le nuggets package Jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()

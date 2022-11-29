@@ -30,6 +30,14 @@ namespace GestionEvent.Controllers
             return Ok(_eventService.SeeEveryEvent());
         }
 
+        [HttpGet("seeFutur")]
+        [Authorize("connected")]
+        public IActionResult SeeFuturEvents()
+        {
+            return Ok(_eventService.SeeFuturEvent());
+        }
+
+
 
         [HttpPost("post")]
         [Authorize("connected")]
@@ -42,6 +50,63 @@ namespace GestionEvent.Controllers
                 int id = int.Parse(identity.Claims.First(x => x.Type == "MemberId").Value);
                 
                 _eventService.CreateNewEvent( form.ToBLL(), id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("delete")]
+        [Authorize("connected")]
+        public IActionResult DeleteEvent(EventDeleteOrCancelViewModel form)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            try
+            {
+                ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+                int id = int.Parse(identity.Claims.First(x => x.Type == "MemberId").Value);
+
+                _eventService.DeleteOneOfMyEvent(form.EventId, id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPatch("cancel")]
+        [Authorize("connected")]
+        public IActionResult CancelEvent(EventDeleteOrCancelViewModel form)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            try
+            {
+                ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+                int id = int.Parse(identity.Claims.First(x => x.Type == "MemberId").Value);
+
+                _eventService.CancelOneOfMyEvent(form.EventId, id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPatch("uncancel")]
+        [Authorize("connected")]
+        public IActionResult UnCancelEvent(EventDeleteOrCancelViewModel form)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            try
+            {
+                ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+                int id = int.Parse(identity.Claims.First(x => x.Type == "MemberId").Value);
+
+                _eventService.UnCancelOneOfMyEvent(form.EventId, id);
                 return Ok();
             }
             catch (Exception e)

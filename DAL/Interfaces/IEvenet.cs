@@ -11,5 +11,10 @@ namespace DAL.Interfaces
     public interface IEvenet : IRepositoryBase<int, Evenement>
     {
         Evenement? getById(int id);
+        IEnumerable<Evenement> GetFutur();
+
+        bool Delete(int id, int otherId);
+        int Cancel(int eventId, int memberId);
+        int UnCancel(int eventId, int memberId);
     }
 }

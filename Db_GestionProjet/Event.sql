@@ -10,6 +10,7 @@
     [LimitePersonne] Int,
     [CreateAt] DATETIME2 DEFAULT GETDATE(),
     [ModifiedAt]DATETIME2 DEFAULT GETDATE(),
+    [isCancel] TINYINT DEFAULT 0, 
 
     CONSTRAINT PK_Event PRIMARY KEY ([Event_Id]),
     CONSTRAINT FK_Events_Member

@@ -12,5 +12,11 @@ namespace BLL.Interfaces
         public Evenement? CreateNewEvent(Evenement data , int id);
 
         public IEnumerable<Evenement> SeeEveryEvent();
+        public IEnumerable<Evenement> SeeFuturEvent();
+
+        public bool DeleteOneOfMyEvent(int eventId, int memberId);
+        public int CancelOneOfMyEvent(int eventId, int memberId);
+        public int UnCancelOneOfMyEvent(int eventId, int memberId);
+
     }
 }

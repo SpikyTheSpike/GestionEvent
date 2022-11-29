@@ -38,12 +38,13 @@ namespace DAL.Repositories
             return id;
         }
 
-        public override bool Delete(int id)
+        public  bool Delete(int id,int member_id)
         {
             IDbCommand cmd = _connection.CreateCommand();
             cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "DELETE FROM Event WHERE Event_Id=@Id";
+            cmd.CommandText = "DELETE FROM Event WHERE Event_Id=@Id AND Member_Id=@MId";
             NewMethod(id, "@Id", cmd);
+            NewMethod(member_id, "@MId", cmd);
             _connection.Open();
             int result = cmd.ExecuteNonQuery();
             _connection.Close();
@@ -64,7 +65,7 @@ namespace DAL.Repositories
         {
             IDbCommand command = _connection.CreateCommand();
             command.CommandType = CommandType.Text;
-            command.CommandText = "SELECT * FROM Event";
+            command.CommandText = "SELECT * FROM Event  WHERE  isCancel<>1";
             _connection.Open();
             using (IDataReader reader = command.ExecuteReader())
             {
@@ -100,6 +101,24 @@ namespace DAL.Repositories
             _connection.Close();
         }
 
+        public  IEnumerable<Evenement> GetFutur()
+        {
+            IDbCommand command = _connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "SELECT * FROM Event WHERE DateDebut > GETDATE() AND isCancel<>1";
+            
+            _connection.Open();
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    yield return Mapper(reader);
+                }
+               
+            }
+            _connection.Close();
+        }
+
         public override bool Update(Evenement entity)
         {
             throw new NotImplementedException();
@@ -125,6 +144,45 @@ namespace DAL.Repositories
         public Evenement? getById(int id)
         {
             return GetById(id);
+        }
+
+        public override bool Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Cancel(int eventId, int memberId)
+        {
+            IDbCommand cmd = _connection.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "UPDATE Event " +
+                "SET isCancel=1 " +
+                " WHERE  Event_Id=@Id AND Member_Id=@MId";
+            NewMethod(eventId, "@Id", cmd);
+            NewMethod(memberId, "@MId", cmd);
+            
+            _connection.Open();
+            int result = cmd.ExecuteNonQuery();
+            _connection.Close();
+
+            return result;
+        }
+
+        public int UnCancel(int eventId, int memberId)
+        {
+            IDbCommand cmd = _connection.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "UPDATE Event " +
+                "SET isCancel=0 " +
+                " WHERE  Event_Id=@Id AND Member_Id=@MId";
+            NewMethod(eventId, "@Id", cmd);
+            NewMethod(memberId, "@MId", cmd);
+
+            _connection.Open();
+            int result = cmd.ExecuteNonQuery();
+            _connection.Close();
+
+            return result;
         }
     }
 }
