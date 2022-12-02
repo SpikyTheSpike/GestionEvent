@@ -7,6 +7,7 @@
     [FirstName]  NVARCHAR(50) ,
     [LastName] NVARCHAR(50),
     [BirthDate] DateTime2,
+    [isAdmin] TINYINT NOT NULL DEFAULT 0
 
     CONSTRAINT PK_Member PRIMARY KEY ([Member_Id]),
     CONSTRAINT Uk_Member_Email UNIQUE ([Email]),

@@ -186,6 +186,32 @@ namespace DAL.Repositories
             };
         }
 
-       
+        public IEnumerable<Inscription> getAllInscription()
+        {
+            IDbCommand command = _connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "SELECT * FROM InscriptionEvent ";
+            _connection.Open();
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    yield return Mapper(reader);
+                }
+            }
+            _connection.Close();
+        }
+
+        public void DeleteAdmin(int ide)
+        {
+            IDbCommand cmd = _connection.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "DELETE FROM InscriptionEvent WHERE Inscription_Id=@Id";
+            NewMethod(ide, "@Id", cmd);
+
+            _connection.Open();
+            int result = cmd.ExecuteNonQuery();
+            _connection.Close();
+        }
     }
 }

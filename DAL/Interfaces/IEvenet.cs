@@ -17,5 +17,7 @@ namespace DAL.Interfaces
         int Cancel(int eventId, int memberId);
         int UnCancel(int eventId, int memberId);
         void UpdateEvent(Evenement data, int id);
+        IEnumerable<Evenement> GetAllAdmin(bool res);
+        void DeleteAdmin(int ide);
     }
 }

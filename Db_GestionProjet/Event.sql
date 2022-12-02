@@ -15,5 +15,5 @@
     CONSTRAINT PK_Event PRIMARY KEY ([Event_Id]),
     CONSTRAINT FK_Events_Member
 		FOREIGN KEY([Member_Id])
-		REFERENCES [Member]([Member_Id]),
+		REFERENCES [Member]([Member_Id]) ON DELETE CASCADE ,
 )

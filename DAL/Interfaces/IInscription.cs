@@ -11,6 +11,7 @@ namespace DAL.Interfaces
     {
         IEnumerable<Inscription> getMyInscription(int Member_Id);
         IEnumerable<Inscription> getInscriptionByEvent(int Event_Id, int Member_Id);
-
+        IEnumerable<Inscription> getAllInscription();
+        void DeleteAdmin(int ide);
     }
 }

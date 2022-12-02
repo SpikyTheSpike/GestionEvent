@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using DAL.Interfaces;
+using DAL.Repositories;
 using Domain.Entities;
 using Isopoh.Cryptography.Argon2;
 using System;
@@ -20,6 +21,16 @@ namespace BLL.Services
             _memberRepository = memberRepository;
         }
 
+        public void DeleteAdmin(int ide)
+        {
+            _memberRepository.DeleteAdmin(ide);
+        }
+
+        public IEnumerable<Member> getListCompte()
+        {
+            return _memberRepository.getListeCompte();
+        }
+
         public Member? Login(string identifiant, string mdp)
         {
             if (string.IsNullOrWhiteSpace(identifiant) || string.IsNullOrWhiteSpace(mdp))
@@ -38,6 +49,26 @@ namespace BLL.Services
                 throw new MotDePasseMauvaisException();
             }
             return _memberRepository.getByIdentifiant(identifiant);
+        }
+
+        public Member? LoginAdmin(string identifiant, string mdp)
+        {
+            if (string.IsNullOrWhiteSpace(identifiant) || string.IsNullOrWhiteSpace(mdp))
+            {
+                throw new ArgumentNullException();
+            }
+
+            string? hashPwd = _memberRepository.GetHashPwd(identifiant);
+            if (hashPwd is null)
+            {
+                throw new IdentifiantNotExistException();
+            }
+
+            if (!Argon2.Verify(hashPwd, mdp))
+            {
+                throw new MotDePasseMauvaisException();
+            }
+            return _memberRepository.getByIdentifiantAdmin(identifiant);
         }
 
         public Member? Register(Member memberData)

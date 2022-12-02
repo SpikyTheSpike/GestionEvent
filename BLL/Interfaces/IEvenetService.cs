@@ -18,5 +18,7 @@ namespace BLL.Interfaces
         public int CancelOneOfMyEvent(int eventId, int memberId);
         public int UnCancelOneOfMyEvent(int eventId, int memberId);
         void UpdateEvent(Evenement data, int id);
+        IEnumerable<Evenement> SeeAdminEvents(bool res);
+        void DeleteAdmin(int ide);
     }
 }

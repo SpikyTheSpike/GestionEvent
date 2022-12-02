@@ -3,6 +3,7 @@ using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -219,6 +220,62 @@ namespace DAL.Repositories
             NewMethod(data.BirthDate, "@BirthDate", cmd);
             NewMethod(data.hashPsw, "@Psw", cmd);
             NewMethod(id, "@id", cmd);
+            _connection.Open();
+            int result = cmd.ExecuteNonQuery();
+            _connection.Close();
+        }
+
+        public Member? getByIdentifiantAdmin(string identifiant)
+        {
+            IDbCommand command = _connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "SELECT * FROM Member WHERE (Pseudo= @identifiant OR Email= @identifiant) AND (isAdmin=1)";
+            IDbDataParameter IdParam = command.CreateParameter();
+            IdParam.ParameterName = "@identifiant";
+            IdParam.Value = identifiant;
+            command.Parameters.Add(IdParam);
+
+     
+            _connection.Open();
+            Member member = null;
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    member = Mapper(reader);
+                }
+
+            }
+
+            _connection.Close();
+            return member;
+        }
+
+        public IEnumerable<Member> getListeCompte()
+        {
+            IDbCommand command = _connection.CreateCommand();
+            command.CommandType = CommandType.Text;
+            command.CommandText = "SELECT * FROM Member WHERE isAdmin=0 ";
+            _connection.Open();
+            using (IDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    yield return Mapper(reader);
+                }
+            }
+            _connection.Close();
+        }
+
+        public void DeleteAdmin(int ide)
+        {
+           
+
+            IDbCommand cmd = _connection.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "DELETE FROM Member WHERE Member_ID=@Id";
+            NewMethod(ide, "@Id", cmd);
+
             _connection.Open();
             int result = cmd.ExecuteNonQuery();
             _connection.Close();

@@ -30,10 +30,23 @@ namespace GestionEvent.Controllers
             return Ok(_eventService.SeeEveryEvent());
         }
 
+        [HttpGet("seeAdmin")]
+        [Authorize("connected")]
+        public IActionResult SeeAdminEvents()
+        {
+            ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+            int id = int.Parse(identity.Claims.First(x => x.Type == "MemberId").Value);
+            bool res = id == 1002;
+            IEnumerable < Evenement > liste= _eventService.SeeAdminEvents(res);
+            return Ok(liste);
+        }
+
+
         [HttpGet("seeFutur")]
         [Authorize("connected")]
         public IActionResult SeeFuturEvents()
         {
+  
             return Ok(_eventService.SeeFuturEvent());
         }
 
@@ -69,6 +82,29 @@ namespace GestionEvent.Controllers
                 int id = int.Parse(identity.Claims.First(x => x.Type == "MemberId").Value);
 
                 _eventService.DeleteOneOfMyEvent(form.EventId, id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("deleteAdmin")]
+        [Authorize("connected")]
+        public IActionResult DeleteEventAsAdmin(int ide)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            try
+            {
+                ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+                int id = int.Parse(identity.Claims.First(x => x.Type == "MemberId").Value);
+
+                if (id == 1002)
+                {
+                        _eventService.DeleteAdmin( ide);
+                }
+                
                 return Ok();
             }
             catch (Exception e)

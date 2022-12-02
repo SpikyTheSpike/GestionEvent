@@ -25,6 +25,16 @@ namespace BLL.Services
             return _inscriptionRepository.GetById(id);
         }
 
+        public void DeleteAdmin(int ide)
+        {
+            _inscriptionRepository.DeleteAdmin(ide);
+        }
+
+        public IEnumerable<Inscription> getAllInscription()
+        {
+            return _inscriptionRepository.getAllInscription();
+        }
+
         public IEnumerable<Inscription> getInscriptionByMember(int Member_Id)
         {
             return _inscriptionRepository.getMyInscription(Member_Id) ;
@@ -34,5 +44,7 @@ namespace BLL.Services
         {
            return  _inscriptionRepository.getInscriptionByEvent(Event_Id, Member_Id) ;
         }
+
+       
     }
 }

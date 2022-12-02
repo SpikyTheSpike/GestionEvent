@@ -12,6 +12,9 @@ namespace BLL.Interfaces
         public Member? Register(Member data);
 
         public Member? Login(string identifiant, string mdp);
+        public Member? LoginAdmin(string identifiant, string mdp);
         public void UpdateProfile(Member data, int id);
+        IEnumerable<Member> getListCompte();
+        void DeleteAdmin(int ide);
     }
 }

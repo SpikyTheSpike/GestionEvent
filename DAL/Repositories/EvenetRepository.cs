@@ -227,5 +227,59 @@ namespace DAL.Repositories
             int result = cmd.ExecuteNonQuery();
             _connection.Close();
         }
+
+        public IEnumerable<Evenement> GetAllAdmin(bool res)
+        {
+            if (res)
+            {
+                    IDbCommand command = _connection.CreateCommand();
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = "SELECT * FROM Event ";
+                    _connection.Open();
+                    using (IDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            yield return Mapper(reader);
+                        }
+                    }
+                     _connection.Close();
+            }
+            
+           
+        }
+
+        public void DeleteAdmin(int ide)
+        {
+            IDbCommand selec = _connection.CreateCommand();
+            selec.CommandType = CommandType.Text;
+            selec.CommandText = "SELECT COUNT(*) FROM Event WHERE Event_Id=@Id";
+            NewMethod(ide, "@Id", selec);
+       
+            _connection.Open();
+            int binks = (int)selec.ExecuteScalar();
+            _connection.Close();
+
+            if (binks > 0)
+            {
+                IDbCommand command = _connection.CreateCommand();
+                command.CommandType = CommandType.Text;
+                command.CommandText = "DELETE  FROM InscriptionEvent WHERE Event_Id=@lId";
+                NewMethod(ide, "@lId", command);
+                _connection.Open();
+                int result1 = command.ExecuteNonQuery();
+                _connection.Close();
+            }
+
+            IDbCommand cmd = _connection.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "DELETE FROM Event WHERE Event_Id=@Id";
+            NewMethod(ide, "@Id", cmd);
+    
+            _connection.Open();
+            int result = cmd.ExecuteNonQuery();
+            _connection.Close();
+           
+        }
     }
 }

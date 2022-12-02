@@ -37,11 +37,22 @@ namespace BLL.Services
             return _eventRepository.GetById(id);
         }
 
+        public void DeleteAdmin(int ide)
+        {
+             _eventRepository.DeleteAdmin(ide);
+        }
+
         public bool DeleteOneOfMyEvent(int eventId, int memberId)
         {
             return _eventRepository.Delete(eventId,memberId);
         }
 
+        public IEnumerable<Evenement> SeeAdminEvents(bool res)
+        {
+            return _eventRepository.GetAllAdmin(res);
+        }
+
+      
         public IEnumerable<Evenement> SeeEveryEvent()
         {
             return _eventRepository.GetAll();
